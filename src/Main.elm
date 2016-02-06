@@ -3,4 +3,4 @@ module Main where
 import Html exposing (text)
 
 main =
-    text "wow"
+    text "Hello, world."
