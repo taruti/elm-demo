@@ -9,6 +9,7 @@ import Html.Events exposing (..)
 import Html.Lazy exposing (lazy, lazy2, lazy3)
 import Json.Decode as Json
 import Mouse
+import Random
 import Signal exposing (Signal, Address)
 import String
 import Window
@@ -26,27 +27,27 @@ m2act (x,y) =   Add {x=x,y=y}
 -- MODEL
 
 type alias Coord = {x:Int, y:Int}
-type Model = Model (List Coord)
-model0 = Model []
+type alias Model = {coords:List Coord, seed: Random.Seed}
+model0 = {coords=[], seed=Random.initialSeed 0}
 
 -- UPDATE
 
 type Action = Reset | Add Coord
 
 update : Action -> Model -> Model
-update action (Model xs) =
+update action model =
   case action of
-    Reset -> Model []
-    Add x -> Model (x::xs)
+    Reset -> model0
+    Add x -> {model | coords = x::model.coords}
 
 -- VIEW
 
 view : (Int,Int) -> Model -> Element
-view (w,h) (Model xs) =
+view (w,h) {coords} =
   let h' = h-100
   in flow down [
-  collage w (h') (List.map (draw (w,h')) xs),
-  headShow xs, headRel (w,h') xs]
+  collage w (h') (List.map (draw (w,h')) coords),
+  headShow coords, headRel (w,h') coords]
 
 headShow xs = case xs of
   [] -> show ""
