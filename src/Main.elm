@@ -22,11 +22,11 @@ input : Signal Action
 input = Signal.sampleOn Mouse.isDown (Signal.map m2act Mouse.position)
 
 m2act : (Int,Int) -> Action
-m2act (x,y) =   Add {x=x,y=y}
+m2act (x,y) =   Add {x=x,y=y,c=rgba 255 0 0 0.5}
 
 -- MODEL
 
-type alias Coord = {x:Int, y:Int}
+type alias Coord = {x:Int, y:Int, c:Color}
 type alias Model = {coords:List Coord, seed: Random.Seed}
 model0 = {coords=[], seed=Random.initialSeed 0}
 
@@ -38,7 +38,16 @@ update : Action -> Model -> Model
 update action model =
   case action of
     Reset -> model0
-    Add x -> {model | coords = x::model.coords}
+    Add x ->
+      let
+      (idx,s') = Random.generate (Random.int 0 (List.length colors - 1)) model.seed
+      c = nth idx colors
+      in {model | coords = {x|c=c}::model.coords, seed=s'}
+
+nth k list =
+  case list of
+    [] -> clearGrey
+    (x::xs) -> if k <= 0 then x else nth (k-1) xs
 
 -- VIEW
 
@@ -58,13 +67,20 @@ headRel wh xs = case xs of
 
 
 draw : (Int,Int) -> Coord -> Form
-draw wh {x,y} =
+draw wh {x,y,c} =
   let
   (rx,ry) = relative wh (x,y)
-  in circle 20 |> filled clearGrey |> move (toFloat rx, toFloat ry)
+  in circle 20 |> filled c |> move (toFloat rx, toFloat ry)
 
 relative (w,h) (x,y) = (x - w//2, h//2 - y)
 
 clearGrey : Color
 clearGrey =
   rgba 111 111 111 0.6
+
+colors : List Color
+colors = [
+  rgba 255 33 33 0.6,
+  rgba 77 20 140 0.6,
+  rgba 27 119 205 0.6,
+  rgba 54 160 48 0.6]
