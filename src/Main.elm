@@ -46,7 +46,7 @@ update action model =
 
 nth k list =
   case list of
-    [] -> clearGrey
+    [] -> rgba 255 0 0 0.9
     (x::xs) -> if k <= 0 then x else nth (k-1) xs
 
 -- VIEW
@@ -73,10 +73,6 @@ draw wh {x,y,c} =
   in circle 20 |> filled c |> move (toFloat rx, toFloat ry)
 
 relative (w,h) (x,y) = (x - w//2, h//2 - y)
-
-clearGrey : Color
-clearGrey =
-  rgba 111 111 111 0.6
 
 colors : List Color
 colors = [
