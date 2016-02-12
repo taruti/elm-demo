@@ -3,15 +3,9 @@ module Main where
 import Color exposing(..)
 import Graphics.Collage exposing (..)
 import Graphics.Element exposing (..)
-import Html exposing (..)
-import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import Html.Lazy exposing (lazy, lazy2, lazy3)
-import Json.Decode as Json
 import Mouse
 import Random
 import Signal exposing (Signal, Address)
-import String
 import Window
 
 main : Signal Element
