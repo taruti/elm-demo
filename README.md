@@ -1,3 +1,1 @@
-# frpmappr
-
-https://github.com/frpmappr/frpmappr
+# Elm doodling
